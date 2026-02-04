@@ -51,8 +51,8 @@ body {
 }
 
 .header-title-container {
-    justify-self: center;
-    text-align: center;
+    justify-self: left;
+    text-align: left;
 }
 
 .header-title {
