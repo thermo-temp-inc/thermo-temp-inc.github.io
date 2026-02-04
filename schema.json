@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Preventative Maintenance Inspection (PMI) Report",
+  "type": "object",
+  "properties": {
+    "General Information": {
+      "$ref": "general_info.json"
+    },
+    "PMI Module (1/3)": {
+      "$ref": "pmi_1.json"
+    },
+    "PMI Module (2/3)": {
+      "$ref": "pmi_2.json"
+    },
+    "PMI Module (3/3)": {
+      "$ref": "pmi_3.json"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "General Information"
+  ]
+}

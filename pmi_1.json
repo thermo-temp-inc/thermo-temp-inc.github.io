@@ -1,0 +1,345 @@
+{
+      "type": "object",
+      "title": "PMI Module (1/3)",
+      "properties": {
+        "T/C Condition": {
+          "title": "T/C Condition",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "T/C Wiring": {
+          "title": "T/C Wiring",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "Internal - Roof": {
+          "title": "Internal - Roof",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "Internal - Right": {
+          "title": "Internal - Right",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "Internal - Left": {
+          "title": "Internal - Left",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "Internal - Back": {
+          "title": "Internal - Back",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "Internal - Floor": {
+          "title": "Internal - Floor",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "Shell Door Seal - Top": {
+          "title": "Shell Door Seal - Top",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "Shell Door Seal - Right": {
+          "title": "Shell Door Seal - Right",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "Shell Door Seal - Bottom": {
+          "title": "Shell Door Seal - Bottom",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "Shell Door Seal - Left": {
+          "title": "Shell Door Seal - Left",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "Left Door Seal - Top": {
+          "title": "Left Door Seal - Top",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "Left Door Seal - Inboard": {
+          "title": "Left Door Seal - Inboard",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "Left Door Seal - Bottom": {
+          "title": "Left Door Seal - Bottom",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "Left Door Seal - Outboard": {
+          "title": "Left Door Seal - Outboard",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "Right Door Seal - Top": {
+          "title": "Right Door Seal - Top",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "Right Door Seal - Inboard": {
+          "title": "Right Door Seal - Inboard",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "Right Door Seal - Bottom": {
+          "title": "Right Door Seal - Bottom",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "Right Door Seal - Outboard": {
+          "title": "Right Door Seal - Outboard",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "Door Latch - Left - Top Latch": {
+          "title": "Door Latch - Left - Top Latch",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "Door Latch - Left - Bottom Latch": {
+          "title": "Door Latch - Left - Bottom Latch",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "Door Latch - Right - Top Latch": {
+          "title": "Door Latch - Right - Top Latch",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "Door Latch - Right - Bottom Latch": {
+          "title": "Door Latch - Right - Bottom Latch",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "Steel Shell - Roof": {
+          "title": "Steel Shell - Roof",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "Steel Shell - Right": {
+          "title": "Steel Shell - Right",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "Steel Shell - Left": {
+          "title": "Steel Shell - Left",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "Steel Shell - Back": {
+          "title": "Steel Shell - Back",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "Steel Shell - Floor": {
+          "title": "Steel Shell - Floor",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "T/C Condition",
+        "T/C Wiring",
+        "Internal - Roof",
+        "Internal - Right",
+        "Internal - Left",
+        "Internal - Back",
+        "Internal - Floor",
+        "Shell Door Seal - Top",
+        "Shell Door Seal - Right",
+        "Shell Door Seal - Bottom",
+        "Shell Door Seal - Left",
+        "Left Door Seal - Top",
+        "Left Door Seal - Inboard",
+        "Left Door Seal - Bottom",
+        "Left Door Seal - Outboard",
+        "Right Door Seal - Top",
+        "Right Door Seal - Inboard",
+        "Right Door Seal - Bottom",
+        "Right Door Seal - Outboard",
+        "Door Latch - Left - Top Latch",
+        "Door Latch - Left - Bottom Latch",
+        "Door Latch - Right - Top Latch",
+        "Door Latch - Right - Bottom Latch",
+        "Steel Shell - Roof",
+        "Steel Shell - Right",
+        "Steel Shell - Left",
+        "Steel Shell - Back",
+        "Steel Shell - Floor"
+      ]
+    }

@@ -1,0 +1,309 @@
+{
+      "type": "object",
+      "title": "PMI Module (2/3)",
+      "properties": {
+        "Re-Circ Fan - Vibration": {
+          "title": "Re-Circ Fan - Vibration",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "Re-Circ Fan - Rubbing": {
+          "title": "Re-Circ Fan - Rubbing",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "Re-Circ Fan - Belt": {
+          "title": "Re-Circ Fan - Belt",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "Re-Circ Fan - Measured RPM": {
+          "title": "Re-Circ Fan - Measured RPM",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "Re-Circ Fan Bearings - Left": {
+          "title": "Re-Circ Fan Bearings - Left",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "Re-Circ Fan Bearings - Left (greased)": {
+          "title": "Re-Circ Fan Bearings - Left (greased)",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "Re-Circ Fan Bearings - Right": {
+          "title": "Re-Circ Fan Bearings - Right",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "Re-Circ Fan Bearings - Right (greased)": {
+          "title": "Re-Circ Fan Bearings - Right (greased)",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "Re-Circ Fan Bearings - Noise": {
+          "title": "Re-Circ Fan Bearings - Noise",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "Exhaust Fan - Vibration": {
+          "title": "Exhaust Fan - Vibration",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "Exhaust Fan - Rubbing": {
+          "title": "Exhaust Fan - Rubbing",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "Exhaust Fan - Belt": {
+          "title": "Exhaust Fan - Belt",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "Exhaust Fan - Measured RPM": {
+          "title": "Exhaust Fan - Measured RPM",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "Exhaust Fan - Bearings": {
+          "title": "Exhaust Fan - Bearings",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "Exhaust Fan - Bearings - Noise": {
+          "title": "Exhaust Fan - Bearings - Noise",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "Re-Circ ΔP Switch": {
+          "title": "Re-Circ ΔP Switch",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "Exhaust ΔP Switch": {
+          "title": "Exhaust ΔP Switch",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "Hi-Temp Trips Heating": {
+          "title": "Hi-Temp Trips Heating",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "Safeties Intact": {
+          "title": "Safeties Intact",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "Instrumentation - Controller": {
+          "title": "Instrumentation - Controller",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "Instrumentation - Recorder": {
+          "title": "Instrumentation - Recorder",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "Instrumentation - Hi-Limit": {
+          "title": "Instrumentation - Hi-Limit",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "Instrumentation - Purge Timer": {
+          "title": "Instrumentation - Purge Timer",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "Instrumentation - Control Panel": {
+          "title": "Instrumentation - Control Panel",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        },
+        "Instrumentation - Indicator Lights": {
+          "title": "Instrumentation - Indicator Lights",
+          "type": "string",
+          "enum": [
+            "None",
+            "Slight",
+            "Critical",
+            "Severe",
+            "N/A"
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "Re-Circ Fan - Vibration",
+        "Re-Circ Fan - Rubbing",
+        "Re-Circ Fan - Belt",
+        "Re-Circ Fan - Measured RPM",
+        "Re-Circ Fan Bearings - Left",
+        "Re-Circ Fan Bearings - Left (greased)",
+        "Re-Circ Fan Bearings - Right",
+        "Re-Circ Fan Bearings - Right (greased)",
+        "Re-Circ Fan Bearings - Noise",
+        "Exhaust Fan - Vibration",
+        "Exhaust Fan - Rubbing",
+        "Exhaust Fan - Belt",
+        "Exhaust Fan - Measured RPM",
+        "Exhaust Fan - Bearings",
+        "Exhaust Fan - Bearings - Noise",
+        "Re-Circ ΔP Switch",
+        "Exhaust ΔP Switch",
+        "Hi-Temp Trips Heating",
+        "Safeties Intact",
+        "Instrumentation - Controller",
+        "Instrumentation - Recorder",
+        "Instrumentation - Hi-Limit",
+        "Instrumentation - Purge Timer",
+        "Instrumentation - Control Panel",
+        "Instrumentation - Indicator Lights"
+      ]
+    }
