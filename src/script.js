@@ -1,140 +1,296 @@
-(async function () {
-    const baseURL = new URL('.', location.href);
-    // fetch a JSON file and parse it
-    async function getJSON(path) {
-        const resp = await fetch(new URL(path, baseURL));
-        if (!resp.ok) throw new Error(`Failed to load ${path}: ${resp.status}`);
-        return resp.json();
-    }
+//
+// schemas - embedded for offline capability
+//
 
-    // recursively replace $ref objects with the actual schema data
-    async function resolveRefs(schema, seen = new Set()) {
-        if (schema === null || schema === undefined) return null;
-        if (Array.isArray(schema)) return Promise.all(schema.map(item => resolveRefs(item, seen)));
-        if (typeof schema !== 'object') return schema;
+const schemas = {
 
-        if (schema.$ref && typeof schema.$ref === 'string') {
-            if (seen.has(schema.$ref)) throw new Error(`circular $ref detected: ${schema.$ref}`);
-            seen.add(schema.$ref);
-            const refSchema = await getJSON(schema.$ref);
-            const resolved = await resolveRefs(refSchema, seen);
-            seen.delete(schema.$ref);
-            return resolved;
-        }
+    // SECTION: GENERAL
 
-        const result = {};
-        for (const [key, val] of Object.entries(schema)) {
-            result[key] = await resolveRefs(val, seen);
-        }
-        return result;
-    }
-
-    // builds the HTML form from a resolved schema object
-    // namePrefix is used to build hierarchical names for nested fields (e.g., "parent.child")
-    function buildForm(schema, container, namePrefix = '') {
-        container.innerHTML = ''; // clear the "Loading..." message
-
-        if (!schema || typeof schema !== 'object') {
-            container.innerHTML = '<p style="color:red;">Error: The schema is invalid.</p>';
-            return;
-        }
-
-        if (schema.properties && typeof schema.properties === 'object') {
-            for (const [propKey, propValue] of Object.entries(schema.properties)) {
-                if (!propValue || typeof propValue !== 'object') continue;
-
-                const formGroup = document.createElement('div');
-                formGroup.className = 'form-group';
-
-                // Handle nested objects
-                if (propValue.type === 'object') {
-                    const label = document.createElement('label');
-                    label.textContent = propValue.title || propKey;
-                    formGroup.appendChild(label);
-
-                    const nestedContainer = document.createElement('div');
-                    nestedContainer.className = 'nested-field';
-
-                    // Create the full name for the parent object
-                    const parentName = namePrefix ? `${namePrefix}.${propKey}` : propKey;
-                    buildForm(propValue, nestedContainer, parentName);
-
-                    formGroup.appendChild(nestedContainer);
-                } else {
-                    // Handle simple fields
-                    const label = document.createElement('label');
-                    label.textContent = propValue.title || propKey;
-
-                    const requiredFields = Array.isArray(schema.required) ? schema.required : [];
-                    if (requiredFields.includes(propKey)) {
-                        label.className = 'required';
-                    }
-
-                    let input;
-                    // ... (input creation logic is the same as before) ...
-                    if (propValue.enum && Array.isArray(propValue.enum)) {
-                        input = document.createElement('select');
-                        propValue.enum.forEach(option => {
-                            const optionElement = document.createElement('option');
-                            optionElement.value = option;
-                            optionElement.textContent = option;
-                            input.appendChild(optionElement);
-                        });
-                    } else if (propValue.type === 'integer') {
-                        input = document.createElement('input');
-                        input.type = 'number';
-                        input.step = '1';
-                    } else if (propValue.type === 'number') {
-                        input = document.createElement('input');
-                        input.type = 'number';
-                    } else if (propValue.type === 'string' && propValue.format === 'date-time') {
-                        input = document.createElement('input');
-                        input.type = 'datetime-local';
-                    } else {
-                        input = document.createElement('input');
-                        input.type = 'text';
-                    }
-
-                    if (input) {
-                        input.id = propKey;
-                        // Use the prefix to create a full name
-                        const fullName = namePrefix ? `${namePrefix}.${propKey}` : propKey;
-                        input.name = fullName;
-                        formGroup.appendChild(input);
-                    }
+    general: {
+        type: "object",
+        title: "General Information",
+        properties: {
+            "Technician Name": { title: "Technician Name", type: "string" },
+            "Podio Ticket #": { title: "Podio Ticket #", type: "string" },
+            "CMS Ticket #": { title: "CMS Ticket #", type: "string" },
+            "Customer ID & Name": { title: "Customer ID & Name", type: "string" },
+            "Customer Address": {
+                title: "Customer Address",
+                type: "object",
+                properties: {
+                    street1: { title: "Street 1", type: "string" },
+                    street2: { title: "Street 2", type: "string" },
+                    city: { title: "City", type: "string" },
+                    state: { title: "State", type: "string" },
+                    postalCode: { title: "Postal Code", type: "string" },
+                    country: { title: "Country", type: "string" }
                 }
-                container.appendChild(formGroup);
+            },
+            "Service Start Time": { title: "Service Start Time", type: "string", format: "datetime-local" },
+            "Service End Time": { title: "Service End Time", type: "string", format: "datetime-local" },
+            "Ambient Temperature": { title: "Ambient Temperature (°F)", type: "number" },
+            "Ambient Relative Humidity": { title: "Ambient Relative Humidity (%)", type: "number" },
+            "Inspection Type": {
+                title: "Inspection Type",
+                type: "string",
+                enum: ["General Preventative Maintenance", "Combustion Inspection", "Furnace Safety/Operational Inspection"]
+            },
+            "Unit Type": { title: "Unit Type", type: "string", enum: ["Oven", "Furnace"] },
+            "Unit Serial #": { title: "Unit Serial #", type: "string" },
+            "Unit ID #": { title: "Unit ID #", type: "string" },
+            "Unit Manufacturer": { title: "Unit Manufacturer", type: "string" },
+            "Unit Model #": { title: "Unit Model #", type: "string" },
+            "Fuel Type": { title: "Fuel Type", type: "string", enum: ["Gas", "Electric", "Other"] },
+            "Voltage": { title: "Voltage", type: "integer" },
+            "Phase": { title: "Phase", type: "integer" }
+        },
+        required: [
+            "Technician Name", "Customer ID & Name", "Customer Address",
+            "Service Start Time", "Service End Time", "Inspection Type",
+            "Unit Type", "Unit Serial #", "Unit Manufacturer", "Unit Model #",
+            "Fuel Type", "Voltage", "Phase"
+        ]
+    },
+
+    // SECTION: PMI 1
+
+    pmi1: {
+        type: "object",
+        title: "PMI Module 1",
+        properties: {
+            "T/C Condition": { title: "T/C Condition", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "T/C Wiring": { title: "T/C Wiring", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "Internal - Roof": { title: "Internal - Roof", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "Internal - Right": { title: "Internal - Right", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "Internal - Left": { title: "Internal - Left", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "Internal - Back": { title: "Internal - Back", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "Internal - Floor": { title: "Internal - Floor", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "Shell Door Seal - Top": { title: "Shell Door Seal - Top", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "Shell Door Seal - Right": { title: "Shell Door Seal - Right", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "Shell Door Seal - Bottom": { title: "Shell Door Seal - Bottom", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "Shell Door Seal - Left": { title: "Shell Door Seal - Left", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "Left Door Seal - Top": { title: "Left Door Seal - Top", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "Left Door Seal - Inboard": { title: "Left Door Seal - Inboard", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "Left Door Seal - Bottom": { title: "Left Door Seal - Bottom", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "Left Door Seal - Outboard": { title: "Left Door Seal - Outboard", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "Right Door Seal - Top": { title: "Right Door Seal - Top", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "Right Door Seal - Inboard": { title: "Right Door Seal - Inboard", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "Right Door Seal - Bottom": { title: "Right Door Seal - Bottom", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "Right Door Seal - Outboard": { title: "Right Door Seal - Outboard", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "Door Latch - Left - Top Latch": { title: "Door Latch - Left - Top Latch", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "Door Latch - Left - Bottom Latch": { title: "Door Latch - Left - Bottom Latch", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "Door Latch - Right - Top Latch": { title: "Door Latch - Right - Top Latch", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "Door Latch - Right - Bottom Latch": { title: "Door Latch - Right - Bottom Latch", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "Steel Shell - Roof": { title: "Steel Shell - Roof", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "Steel Shell - Right": { title: "Steel Shell - Right", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "Steel Shell - Left": { title: "Steel Shell - Left", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "Steel Shell - Back": { title: "Steel Shell - Back", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "Steel Shell - Floor": { title: "Steel Shell - Floor", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] }
+        },
+        required: [
+            "T/C Condition", "T/C Wiring", "Internal - Roof", "Internal - Right",
+            "Internal - Left", "Internal - Back", "Internal - Floor",
+            "Shell Door Seal - Top", "Shell Door Seal - Right", "Shell Door Seal - Bottom", "Shell Door Seal - Left",
+            "Left Door Seal - Top", "Left Door Seal - Inboard", "Left Door Seal - Bottom", "Left Door Seal - Outboard",
+            "Right Door Seal - Top", "Right Door Seal - Inboard", "Right Door Seal - Bottom", "Right Door Seal - Outboard",
+            "Door Latch - Left - Top Latch", "Door Latch - Left - Bottom Latch",
+            "Door Latch - Right - Top Latch", "Door Latch - Right - Bottom Latch",
+            "Steel Shell - Roof", "Steel Shell - Right", "Steel Shell - Left", "Steel Shell - Back", "Steel Shell - Floor"
+        ]
+    },
+
+    // SECTION: PMI 2
+
+    pmi2: {
+        type: "object",
+        title: "PMI Module 2",
+        properties: {
+            "Re-Circ Fan - Vibration": { title: "Re-Circ Fan - Vibration", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "Re-Circ Fan - Rubbing": { title: "Re-Circ Fan - Rubbing", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "Re-Circ Fan - Belt": { title: "Re-Circ Fan - Belt", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "Re-Circ Fan - Measured RPM": { title: "Re-Circ Fan - Measured RPM", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "Re-Circ Fan Bearings - Left": { title: "Re-Circ Fan Bearings - Left", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "Re-Circ Fan Bearings - Left (greased)": { title: "Re-Circ Fan Bearings - Left (greased)", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "Re-Circ Fan Bearings - Right": { title: "Re-Circ Fan Bearings - Right", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "Re-Circ Fan Bearings - Right (greased)": { title: "Re-Circ Fan Bearings - Right (greased)", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "Re-Circ Fan Bearings - Noise": { title: "Re-Circ Fan Bearings - Noise", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "Exhaust Fan - Vibration": { title: "Exhaust Fan - Vibration", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "Exhaust Fan - Rubbing": { title: "Exhaust Fan - Rubbing", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "Exhaust Fan - Belt": { title: "Exhaust Fan - Belt", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "Exhaust Fan - Measured RPM": { title: "Exhaust Fan - Measured RPM", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "Exhaust Fan - Bearings": { title: "Exhaust Fan - Bearings", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "Exhaust Fan - Bearings - Noise": { title: "Exhaust Fan - Bearings - Noise", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "Re-Circ ΔP Switch": { title: "Re-Circ ΔP Switch", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "Exhaust ΔP Switch": { title: "Exhaust ΔP Switch", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "Hi-Temp Trips Heating": { title: "Hi-Temp Trips Heating", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "Safeties Intact": { title: "Safeties Intact", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "Instrumentation - Controller": { title: "Instrumentation - Controller", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "Instrumentation - Recorder": { title: "Instrumentation - Recorder", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "Instrumentation - Hi-Limit": { title: "Instrumentation - Hi-Limit", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "Instrumentation - Purge Timer": { title: "Instrumentation - Purge Timer", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "Instrumentation - Control Panel": { title: "Instrumentation - Control Panel", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+            "Instrumentation - Indicator Lights": { title: "Instrumentation - Indicator Lights", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] }
+        },
+        required: [
+            "Re-Circ Fan - Vibration", "Re-Circ Fan - Rubbing", "Re-Circ Fan - Belt", "Re-Circ Fan - Measured RPM",
+            "Re-Circ Fan Bearings - Left", "Re-Circ Fan Bearings - Left (greased)",
+            "Re-Circ Fan Bearings - Right", "Re-Circ Fan Bearings - Right (greased)", "Re-Circ Fan Bearings - Noise",
+            "Exhaust Fan - Vibration", "Exhaust Fan - Rubbing", "Exhaust Fan - Belt", "Exhaust Fan - Measured RPM",
+            "Exhaust Fan - Bearings", "Exhaust Fan - Bearings - Noise",
+            "Re-Circ ΔP Switch", "Exhaust ΔP Switch", "Hi-Temp Trips Heating", "Safeties Intact",
+            "Instrumentation - Controller", "Instrumentation - Recorder", "Instrumentation - Hi-Limit",
+            "Instrumentation - Purge Timer", "Instrumentation - Control Panel", "Instrumentation - Indicator Lights"
+        ]
+    },
+
+    // SECTION: PMI 3
+
+    pmi3: {
+        type: "object",
+        title: "PMI Module 3",
+        properties: {
+            "# of Element Banks": { title: "# of Element Banks", type: "integer" },
+            "Element Bank X - LY Current (A)": {
+                title: "Element Bank X - LY Current (A)",
+                type: "object",
+                properties: {
+                    amperageStatus: { title: "Amperage Status", type: "string", enum: ["Pass", "Fail"] },
+                    fuseCondition: { title: "Fuse Condition", type: "string", enum: ["Good", "Blown"] },
+                    comment: { title: "Comment", type: "string" }
+                },
+                required: ["amperageStatus", "fuseCondition"]
+            },
+            "Element Bank X - LY Connections": {
+                title: "Element Bank X - LY Connections",
+                type: "object",
+                properties: {
+                    amperageStatus: { title: "Amperage Status", type: "string", enum: ["Pass", "Fail"] },
+                    fuseCondition: { title: "Fuse Condition", type: "string", enum: ["Good", "Blown"] },
+                    comment: { title: "Comment", type: "string" }
+                },
+                required: ["amperageStatus", "fuseCondition"]
             }
+        },
+        required: ["# of Element Banks", "Element Bank X - LY Current (A)", "Element Bank X - LY Connections"]
+    }
+};
+
+//
+// editor instances
+//
+
+const editors = {};
+let currentPage = 0;
+const totalPages = 5;
+
+// default config for all editors
+const editorConfig = {
+    theme: 'html',
+    iconlib: null,
+    disable_edit_json: true,
+    disable_properties: true,
+    disable_collapse: true,
+    disable_array_add: true,
+    disable_array_delete: true,
+    disable_array_reorder: true,
+    no_additional_properties: true,
+    show_opt_in: false,
+    required_by_default: false
+};
+
+// initialize editors on page load
+document.addEventListener('DOMContentLoaded', () => {
+    editors.general = new JSONEditor(document.getElementById('editor-general'), {
+        ...editorConfig,
+        schema: schemas.general
+    });
+
+    editors.pmi1 = new JSONEditor(document.getElementById('editor-pmi1'), {
+        ...editorConfig,
+        schema: schemas.pmi1
+    });
+
+    editors.pmi2 = new JSONEditor(document.getElementById('editor-pmi2'), {
+        ...editorConfig,
+        schema: schemas.pmi2
+    });
+
+    editors.pmi3 = new JSONEditor(document.getElementById('editor-pmi3'), {
+        ...editorConfig,
+        schema: schemas.pmi3
+    });
+
+    updateProgress();
+});
+
+//
+// navigation
+//
+
+function goToPage(pageNum) {
+    if (pageNum < 0 || pageNum >= totalPages) return;
+    // hide the current page
+    document.querySelector(`.page[data-page="${currentPage}"]`).classList.remove('active');
+    // show the new page
+    currentPage = pageNum;
+    document.querySelector(`.page[data-page="${currentPage}"]`).classList.add('active');
+    // update the progress
+    updateProgress();
+    // smooth-scroll to the top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function updateProgress() {
+    const container = document.getElementById('progress');
+    container.innerHTML = '';
+
+    const labels = ['0', '1', '2', '3', '4'];
+
+    labels.forEach((label, i) => {
+        // Add step
+        const step = document.createElement('div');
+        step.className = 'progress-step';
+        if (i === currentPage) step.classList.add('active');
+        if (i < currentPage) step.classList.add('completed');
+        step.textContent = label;
+        step.style.cursor = 'pointer';
+        step.onclick = () => goToPage(i);
+        container.appendChild(step);
+
+        // add line (except after last)
+        if (i < labels.length - 1) {
+            const line = document.createElement('div');
+            line.className = 'progress-line';
+            if (i < currentPage) line.classList.add('completed');
+            container.appendChild(line);
         }
-    }
+    });
+}
 
+//
+// form data download
+//
 
-    // main execution logic
-    try {
-        const masterSchema = await getJSON('schema.json');
-        const fullResolvedSchema = await resolveRefs(masterSchema);
-        const formContainer = document.getElementById('form-container');
+function downloadReport() {
+    const report = {
+        "General Information": editors.general.getValue(),
+        "PMI Module (1/3)": editors.pmi1.getValue(),
+        "PMI Module (2/3)": editors.pmi2.getValue(),
+        "PMI Module (3/3)": editors.pmi3.getValue(),
+        "_metadata": {
+            generatedAt: new Date().toISOString(),
+            formVersion: "2026.02.04" // NOTE: update this if the form changes once it's live
+        }
+    };
 
-        buildForm(fullResolvedSchema, formContainer);
+    const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
 
-        // TODO: proper form data collection + download
-        document.getElementById('download-btn').addEventListener('click', () => {
-            const formData = {};
-            document.querySelectorAll('#form-container input, #form-container select').forEach(el => {
-                if (el.type === 'datetime-local') {
-                    // convert datetime-local to ISO string for consistency
-                    formData[el.name] = el.value ? new Date(el.value).toISOString() : '';
-                } else { // TODO: are there any other cases needed here?
-                    formData[el.name] = el.value;
-                }
-            });
-            console.log('Form Data:', formData);
-            alert('Check the browser console for the collected form data!');
-            /* https://workflow-automation.podio.com/catch/5h7nk1roqum0bq9 */
-        });
-    } catch (e) {
-        console.error(e);
-        document.getElementById('form-container').innerHTML =
-            '<p style="color:red;">Error loading schema: ' + e.message + '</p>';
-    }
-})();
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `pmi-report-${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
