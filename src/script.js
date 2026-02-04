@@ -247,14 +247,12 @@ function updateProgress() {
     const labels = ['0', '1', '2', '3', '4'];
 
     labels.forEach((label, i) => {
-        // Add step
+        // Add step (not clickable)
         const step = document.createElement('div');
         step.className = 'progress-step';
         if (i === currentPage) step.classList.add('active');
         if (i < currentPage) step.classList.add('completed');
         step.textContent = label;
-        step.style.cursor = 'pointer';
-        step.onclick = () => goToPage(i);
         container.appendChild(step);
 
         // add line (except after last)
