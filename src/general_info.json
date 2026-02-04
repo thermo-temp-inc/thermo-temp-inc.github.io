@@ -1,0 +1,131 @@
+{
+  "type": "object",
+  "title": "General Information",
+  "properties": {
+    "Technician Name": {
+      "title": "Technician Name",
+      "type": "string"
+    },
+    "Podio Ticket #": {
+      "title": "Podio Ticket #",
+      "type": "string"
+    },
+    "CMS Ticket #": {
+      "title": "CMS Ticket #",
+      "type": "string"
+    },
+    "Customer ID & Name": {
+      "title": "Customer ID & Name",
+      "type": "string"
+    },
+    "Customer Address": {
+      "title": "Customer Address",
+      "type": "object",
+      "properties": {
+        "street1": {
+          "type": "string"
+        },
+        "street2": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "postalCode": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "Service Start Time": {
+      "title": "Service Start Time",
+      "type": "string",
+      "format": "date-time"
+    },
+    "Service End Time": {
+      "title": "Service End Time",
+      "type": "string",
+      "format": "date-time"
+    },
+    "Ambient Temperature": {
+      "title": "Ambient Temperature",
+      "type": "number"
+    },
+    "Ambient Relative Humidity": {
+      "title": "Ambient Relative Humidity",
+      "type": "number"
+    },
+    "Inspection Type": {
+      "title": "Inspection Type",
+      "type": "string",
+      "enum": [
+        "General Preventative Maintenance",
+        "Combustion Inspection",
+        "Furnace Safety/Operational Inspection"
+      ]
+    },
+    "Unit Type": {
+      "title": "Unit Type",
+      "type": "string",
+      "enum": [
+        "Oven",
+        "Furnace"
+      ]
+    },
+    "Unit Serial #": {
+      "title": "Unit Serial #",
+      "type": "string"
+    },
+    "Unit ID #": {
+      "title": "Unit ID #",
+      "type": "string"
+    },
+    "Unit Manufacturer": {
+      "title": "Unit Manufacturer",
+      "type": "string"
+    },
+    "Unit Model #": {
+      "title": "Unit Model #",
+      "type": "string"
+    },
+    "Fuel Type": {
+      "title": "Fuel Type",
+      "type": "string",
+      "enum": [
+        "Gas",
+        "Electric",
+        "Other"
+      ]
+    },
+    "Voltage": {
+      "title": "Voltage",
+      "type": "integer"
+    },
+    "Phase": {
+      "title": "Phase",
+      "type": "integer"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "Technician Name",
+    "Customer ID & Name",
+    "Customer Address",
+    "Service Start Time",
+    "Service End Time",
+    "Inspection Type",
+    "Unit Type",
+    "Unit Serial #",
+    "Unit Manufacturer",
+    "Unit Model #",
+    "Fuel Type",
+    "Voltage",
+    "Phase"
+  ]
+}

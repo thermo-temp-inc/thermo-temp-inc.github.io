@@ -2,111 +2,478 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Preventative Maintenance Inspection (PMI) Report</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f4f4f9;
-        }
-
-        h1 { text-align: center; color: #333; }
-        
-        .form-container {
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        fieldset {
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            margin-bottom: 25px;
-            padding: 20px;
-        }
-
-        legend {
-            font-weight: bold;
-            padding: 0 10px;
-            color: #555;
-            font-size: 1.1em;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 500;
-            color: #444;
-        }
-
-        /* required fields */
-        .required:after {
-            content: " *";
-            color: red;
-        }
-        
-        input, select, textarea {
-            width: 100%;
-            padding: 10px;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-
-        input:focus, select:focus {
-            outline: 2px solid #007BFF;
-            border-color: transparent;
-        }
-
-        .nested-field {
-            margin-left: 10px;
-            border-left: 2px solid #eee;
-            padding-left: 15px;
-        }
-
-        .actions {
-            text-align: center;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
-        }
-
-        button {
-            background-color: #28a745;
-            color: white;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        button:hover {
-            background-color: #218838;
-        }
-    </style>
+    <title>PMI Report</title>
+    <link rel="stylesheet" href="src/jsoneditor.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="src/styles.css">
 </head>
 <body>
-    <h1>Preventative Maintenance Inspection (PMI) Report</h1>
+    <header class="header">
+        <div>
+            <div class="header-title">PMI Report</div>
+            <div class="header-subtitle">Preventative Maintenance Inspection</div>
+        </div>
+        <div class="progress-container" id="progress">
+            <!-- JS -->
+        </div>
+    </header>
 
-    <div id="form-container" class="form-container">
-        <p>Loading form schema…</p>
-    </div>
+    <main class="main-container">
+        <!-- Page 0: Welcome -->
+        <section class="page active" data-page="0">
+            <div class="welcome-page">
+                <div class="welcome-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                </div>
+                <h1 class="welcome-title">Preventative Maintenance Inspection</h1>
+                <p class="welcome-subtitle">
+                    Complete this inspection report to document equipment condition and maintenance performed.
+                </p>
+                <div class="welcome-checklist">
+                    <h3>This report includes</h3>
+                    <div class="checklist-item">General Information & Unit Details</div>
+                    <div class="checklist-item">Internal Condition & Door Seals</div>
+                    <div class="checklist-item">Fans, Bearings & Instrumentation</div>
+                    <div class="checklist-item">Element Banks & Electrical</div>
+                </div>
+                <div class="nav-container" style="justify-content: center; border: none; margin-top: 1rem;">
+                    <button class="btn btn-primary" onclick="goToPage(1)">
+                        Begin Inspection
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </section>
 
-    <div class="actions">
-        <button id="download-btn">Download form data</button>
-    </div>
+        <!-- Page 1: General Information -->
+        <section class="page" data-page="1">
+            <div class="section-header">
+                <div class="section-number">Section 1 of 4</div>
+                <h2 class="section-title">General Information</h2>
+                <p class="section-description">Technician details, customer info, and unit identification.</p>
+            </div>
+            <div class="editor-container">
+                <div id="editor-general"></div>
+            </div>
+            <div class="nav-container">
+                <button class="btn btn-secondary" onclick="goToPage(0)">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                    Back
+                </button>
+                <button class="btn btn-primary" onclick="goToPage(2)">
+                    Next
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </button>
+            </div>
+        </section>
 
-    <script src="script.js"></script>
+        <!-- Page 2: PMI section 1/3 -->
+        <section class="page" data-page="2">
+            <div class="section-header">
+                <div class="section-number">Section 2 of 4</div>
+                <h2 class="section-title">Internal Condition & Door Seals</h2>
+                <p class="section-description">T/C condition, internal surfaces, door seals, latches, and shell condition.</p>
+            </div>
+            <div class="editor-container">
+                <div id="editor-pmi1"></div>
+            </div>
+            <div class="nav-container">
+                <button class="btn btn-secondary" onclick="goToPage(1)">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                    Back
+                </button>
+                <button class="btn btn-primary" onclick="goToPage(3)">
+                    Next
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </button>
+            </div>
+        </section>
+
+        <!-- Page 3: PMI section 2/3 -->
+        <section class="page" data-page="3">
+            <div class="section-header">
+                <div class="section-number">Section 3 of 4</div>
+                <h2 class="section-title">Fans, Bearings & Instrumentation</h2>
+                <p class="section-description">Re-circ and exhaust fans, bearings, switches, and control instrumentation.</p>
+            </div>
+            <div class="editor-container">
+                <div id="editor-pmi2"></div>
+            </div>
+            <div class="nav-container">
+                <button class="btn btn-secondary" onclick="goToPage(2)">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                    Back
+                </button>
+                <button class="btn btn-primary" onclick="goToPage(4)">
+                    Next
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </button>
+            </div>
+        </section>
+
+        <!-- Page 4: PMI section 3/3 -->
+        <section class="page" data-page="4">
+            <div class="section-header">
+                <div class="section-number">Section 4 of 4</div>
+                <h2 class="section-title">Element Banks & Electrical</h2>
+                <p class="section-description">Element bank inspection, amperage status, and fuse conditions.</p>
+            </div>
+            <div class="editor-container">
+                <div id="editor-pmi3"></div>
+            </div>
+            <div class="download-section">
+                <p>Once complete, download the inspection data as JSON for submission.</p>
+                <button class="btn btn-success" onclick="downloadReport()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    Download Report
+                </button>
+            </div>
+            <div class="nav-container">
+                <button class="btn btn-secondary" onclick="goToPage(3)">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                    Back
+                </button>
+                <span></span>
+            </div>
+        </section>
+    </main>
+
+    <!-- json schema => form -->
+    <script src="src/jsoneditor.min.js"></script>
+
+    <script>
+        //
+        // schemas - embedded for offline capability
+        //
+        const schemas = {
+
+            // SECTION: GENERAL
+
+            general: {
+                type: "object",
+                title: "General Information",
+                properties: {
+                    "Technician Name": { title: "Technician Name", type: "string" },
+                    "Podio Ticket #": { title: "Podio Ticket #", type: "string" },
+                    "CMS Ticket #": { title: "CMS Ticket #", type: "string" },
+                    "Customer ID & Name": { title: "Customer ID & Name", type: "string" },
+                    "Customer Address": {
+                        title: "Customer Address",
+                        type: "object",
+                        properties: {
+                            street1: { title: "Street 1", type: "string" },
+                            street2: { title: "Street 2", type: "string" },
+                            city: { title: "City", type: "string" },
+                            state: { title: "State", type: "string" },
+                            postalCode: { title: "Postal Code", type: "string" },
+                            country: { title: "Country", type: "string" }
+                        }
+                    },
+                    "Service Start Time": { title: "Service Start Time", type: "string", format: "datetime-local" },
+                    "Service End Time": { title: "Service End Time", type: "string", format: "datetime-local" },
+                    "Ambient Temperature": { title: "Ambient Temperature (°F)", type: "number" },
+                    "Ambient Relative Humidity": { title: "Ambient Relative Humidity (%)", type: "number" },
+                    "Inspection Type": {
+                        title: "Inspection Type",
+                        type: "string",
+                        enum: ["General Preventative Maintenance", "Combustion Inspection", "Furnace Safety/Operational Inspection"]
+                    },
+                    "Unit Type": { title: "Unit Type", type: "string", enum: ["Oven", "Furnace"] },
+                    "Unit Serial #": { title: "Unit Serial #", type: "string" },
+                    "Unit ID #": { title: "Unit ID #", type: "string" },
+                    "Unit Manufacturer": { title: "Unit Manufacturer", type: "string" },
+                    "Unit Model #": { title: "Unit Model #", type: "string" },
+                    "Fuel Type": { title: "Fuel Type", type: "string", enum: ["Gas", "Electric", "Other"] },
+                    "Voltage": { title: "Voltage", type: "integer" },
+                    "Phase": { title: "Phase", type: "integer" }
+                },
+                required: [
+                    "Technician Name", "Customer ID & Name", "Customer Address",
+                    "Service Start Time", "Service End Time", "Inspection Type",
+                    "Unit Type", "Unit Serial #", "Unit Manufacturer", "Unit Model #",
+                    "Fuel Type", "Voltage", "Phase"
+                ]
+            },
+
+            // SECTION: PMI 1
+
+            pmi1: {
+                type: "object",
+                title: "PMI Module 1",
+                properties: {
+                    "T/C Condition": { title: "T/C Condition", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "T/C Wiring": { title: "T/C Wiring", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "Internal - Roof": { title: "Internal - Roof", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "Internal - Right": { title: "Internal - Right", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "Internal - Left": { title: "Internal - Left", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "Internal - Back": { title: "Internal - Back", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "Internal - Floor": { title: "Internal - Floor", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "Shell Door Seal - Top": { title: "Shell Door Seal - Top", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "Shell Door Seal - Right": { title: "Shell Door Seal - Right", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "Shell Door Seal - Bottom": { title: "Shell Door Seal - Bottom", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "Shell Door Seal - Left": { title: "Shell Door Seal - Left", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "Left Door Seal - Top": { title: "Left Door Seal - Top", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "Left Door Seal - Inboard": { title: "Left Door Seal - Inboard", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "Left Door Seal - Bottom": { title: "Left Door Seal - Bottom", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "Left Door Seal - Outboard": { title: "Left Door Seal - Outboard", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "Right Door Seal - Top": { title: "Right Door Seal - Top", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "Right Door Seal - Inboard": { title: "Right Door Seal - Inboard", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "Right Door Seal - Bottom": { title: "Right Door Seal - Bottom", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "Right Door Seal - Outboard": { title: "Right Door Seal - Outboard", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "Door Latch - Left - Top Latch": { title: "Door Latch - Left - Top Latch", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "Door Latch - Left - Bottom Latch": { title: "Door Latch - Left - Bottom Latch", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "Door Latch - Right - Top Latch": { title: "Door Latch - Right - Top Latch", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "Door Latch - Right - Bottom Latch": { title: "Door Latch - Right - Bottom Latch", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "Steel Shell - Roof": { title: "Steel Shell - Roof", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "Steel Shell - Right": { title: "Steel Shell - Right", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "Steel Shell - Left": { title: "Steel Shell - Left", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "Steel Shell - Back": { title: "Steel Shell - Back", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "Steel Shell - Floor": { title: "Steel Shell - Floor", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] }
+                },
+                required: [
+                    "T/C Condition", "T/C Wiring", "Internal - Roof", "Internal - Right",
+                    "Internal - Left", "Internal - Back", "Internal - Floor",
+                    "Shell Door Seal - Top", "Shell Door Seal - Right", "Shell Door Seal - Bottom", "Shell Door Seal - Left",
+                    "Left Door Seal - Top", "Left Door Seal - Inboard", "Left Door Seal - Bottom", "Left Door Seal - Outboard",
+                    "Right Door Seal - Top", "Right Door Seal - Inboard", "Right Door Seal - Bottom", "Right Door Seal - Outboard",
+                    "Door Latch - Left - Top Latch", "Door Latch - Left - Bottom Latch",
+                    "Door Latch - Right - Top Latch", "Door Latch - Right - Bottom Latch",
+                    "Steel Shell - Roof", "Steel Shell - Right", "Steel Shell - Left", "Steel Shell - Back", "Steel Shell - Floor"
+                ]
+            },
+
+            // SECTION: PMI 2
+
+            pmi2: {
+                type: "object",
+                title: "PMI Module 2",
+                properties: {
+                    "Re-Circ Fan - Vibration": { title: "Re-Circ Fan - Vibration", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "Re-Circ Fan - Rubbing": { title: "Re-Circ Fan - Rubbing", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "Re-Circ Fan - Belt": { title: "Re-Circ Fan - Belt", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "Re-Circ Fan - Measured RPM": { title: "Re-Circ Fan - Measured RPM", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "Re-Circ Fan Bearings - Left": { title: "Re-Circ Fan Bearings - Left", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "Re-Circ Fan Bearings - Left (greased)": { title: "Re-Circ Fan Bearings - Left (greased)", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "Re-Circ Fan Bearings - Right": { title: "Re-Circ Fan Bearings - Right", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "Re-Circ Fan Bearings - Right (greased)": { title: "Re-Circ Fan Bearings - Right (greased)", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "Re-Circ Fan Bearings - Noise": { title: "Re-Circ Fan Bearings - Noise", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "Exhaust Fan - Vibration": { title: "Exhaust Fan - Vibration", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "Exhaust Fan - Rubbing": { title: "Exhaust Fan - Rubbing", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "Exhaust Fan - Belt": { title: "Exhaust Fan - Belt", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "Exhaust Fan - Measured RPM": { title: "Exhaust Fan - Measured RPM", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "Exhaust Fan - Bearings": { title: "Exhaust Fan - Bearings", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "Exhaust Fan - Bearings - Noise": { title: "Exhaust Fan - Bearings - Noise", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "Re-Circ ΔP Switch": { title: "Re-Circ ΔP Switch", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "Exhaust ΔP Switch": { title: "Exhaust ΔP Switch", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "Hi-Temp Trips Heating": { title: "Hi-Temp Trips Heating", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "Safeties Intact": { title: "Safeties Intact", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "Instrumentation - Controller": { title: "Instrumentation - Controller", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "Instrumentation - Recorder": { title: "Instrumentation - Recorder", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "Instrumentation - Hi-Limit": { title: "Instrumentation - Hi-Limit", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "Instrumentation - Purge Timer": { title: "Instrumentation - Purge Timer", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "Instrumentation - Control Panel": { title: "Instrumentation - Control Panel", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] },
+                    "Instrumentation - Indicator Lights": { title: "Instrumentation - Indicator Lights", type: "string", enum: ["None", "Slight", "Critical", "Severe", "N/A"] }
+                },
+                required: [
+                    "Re-Circ Fan - Vibration", "Re-Circ Fan - Rubbing", "Re-Circ Fan - Belt", "Re-Circ Fan - Measured RPM",
+                    "Re-Circ Fan Bearings - Left", "Re-Circ Fan Bearings - Left (greased)",
+                    "Re-Circ Fan Bearings - Right", "Re-Circ Fan Bearings - Right (greased)", "Re-Circ Fan Bearings - Noise",
+                    "Exhaust Fan - Vibration", "Exhaust Fan - Rubbing", "Exhaust Fan - Belt", "Exhaust Fan - Measured RPM",
+                    "Exhaust Fan - Bearings", "Exhaust Fan - Bearings - Noise",
+                    "Re-Circ ΔP Switch", "Exhaust ΔP Switch", "Hi-Temp Trips Heating", "Safeties Intact",
+                    "Instrumentation - Controller", "Instrumentation - Recorder", "Instrumentation - Hi-Limit",
+                    "Instrumentation - Purge Timer", "Instrumentation - Control Panel", "Instrumentation - Indicator Lights"
+                ]
+            },
+
+            // SECTION: PMI 3
+
+            pmi3: {
+                type: "object",
+                title: "PMI Module 3",
+                properties: {
+                    "# of Element Banks": { title: "# of Element Banks", type: "integer" },
+                    "Element Bank X - LY Current (A)": {
+                        title: "Element Bank X - LY Current (A)",
+                        type: "object",
+                        properties: {
+                            amperageStatus: { title: "Amperage Status", type: "string", enum: ["Pass", "Fail"] },
+                            fuseCondition: { title: "Fuse Condition", type: "string", enum: ["Good", "Blown"] },
+                            comment: { title: "Comment", type: "string" }
+                        },
+                        required: ["amperageStatus", "fuseCondition"]
+                    },
+                    "Element Bank X - LY Connections": {
+                        title: "Element Bank X - LY Connections",
+                        type: "object",
+                        properties: {
+                            amperageStatus: { title: "Amperage Status", type: "string", enum: ["Pass", "Fail"] },
+                            fuseCondition: { title: "Fuse Condition", type: "string", enum: ["Good", "Blown"] },
+                            comment: { title: "Comment", type: "string" }
+                        },
+                        required: ["amperageStatus", "fuseCondition"]
+                    }
+                },
+                required: ["# of Element Banks", "Element Bank X - LY Current (A)", "Element Bank X - LY Connections"]
+            }
+        };
+
+        //
+        // editor instances
+        //
+
+        const editors = {};
+        let currentPage = 0;
+        const totalPages = 5;
+
+        // default config for all editors
+        const editorConfig = {
+            theme: 'html',
+            iconlib: null,
+            disable_edit_json: true,
+            disable_properties: true,
+            disable_collapse: true,
+            disable_array_add: true,
+            disable_array_delete: true,
+            disable_array_reorder: true,
+            no_additional_properties: true,
+            show_opt_in: false,
+            required_by_default: false
+        };
+
+        // initialize editors on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            editors.general = new JSONEditor(document.getElementById('editor-general'), {
+                ...editorConfig,
+                schema: schemas.general
+            });
+
+            editors.pmi1 = new JSONEditor(document.getElementById('editor-pmi1'), {
+                ...editorConfig,
+                schema: schemas.pmi1
+            });
+
+            editors.pmi2 = new JSONEditor(document.getElementById('editor-pmi2'), {
+                ...editorConfig,
+                schema: schemas.pmi2
+            });
+
+            editors.pmi3 = new JSONEditor(document.getElementById('editor-pmi3'), {
+                ...editorConfig,
+                schema: schemas.pmi3
+            });
+
+            updateProgress();
+        });
+
+        //
+        // navigation
+        //
+
+        function goToPage(pageNum) {
+            if (pageNum < 0 || pageNum >= totalPages) return;
+            // hide the current page
+            document.querySelector(`.page[data-page="${currentPage}"]`).classList.remove('active');
+            // show the new page
+            currentPage = pageNum;
+            document.querySelector(`.page[data-page="${currentPage}"]`).classList.add('active');
+            // update the progress
+            updateProgress();
+            // smooth-scroll to the top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function updateProgress() {
+            const container = document.getElementById('progress');
+            container.innerHTML = '';
+
+            const labels = ['0', '1', '2', '3', '4'];
+
+            labels.forEach((label, i) => {
+                // Add step
+                const step = document.createElement('div');
+                step.className = 'progress-step';
+                if (i === currentPage) step.classList.add('active');
+                if (i < currentPage) step.classList.add('completed');
+                step.textContent = label;
+                step.style.cursor = 'pointer';
+                step.onclick = () => goToPage(i);
+                container.appendChild(step);
+
+                // add line (except after last)
+                if (i < labels.length - 1) {
+                    const line = document.createElement('div');
+                    line.className = 'progress-line';
+                    if (i < currentPage) line.classList.add('completed');
+                    container.appendChild(line);
+                }
+            });
+        }
+
+        //
+        // form data download
+        //
+
+        function downloadReport() {
+            const report = {
+                "General Information": editors.general.getValue(),
+                "PMI Module (1/3)": editors.pmi1.getValue(),
+                "PMI Module (2/3)": editors.pmi2.getValue(),
+                "PMI Module (3/3)": editors.pmi3.getValue(),
+                "_metadata": {
+                    generatedAt: new Date().toISOString(),
+                    formVersion: "2026.02.04" // NOTE: update this if the form changes once it's live
+                }
+            };
+
+            const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `pmi-report-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    </script>
 </body>
 </html>
